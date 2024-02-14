@@ -1,0 +1,19 @@
+
+
+/* Estilos para la tabla */
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: 550px; /* Tamaño deseado de la tabla */
+    height: 550px;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+td:hover{
+    background-color: gray; 
+}
