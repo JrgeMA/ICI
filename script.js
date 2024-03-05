@@ -73,8 +73,8 @@ $(document).ready(function () {
 
             $(this).addClass('bg-primary').addClass('start')
             nodoIni = {
-                x: $(this).attr('x'),
-                y: $(this).attr('y'),
+                x: parseInt($(this).attr('y')),
+                y: parseInt($(this).attr('x')),
                 g: 0
             };
 
@@ -93,8 +93,8 @@ $(document).ready(function () {
             prohibida.attr('disabled')
             $(this).addClass('bg-success').addClass('end')
             nodoMeta = {
-                x: $(this).attr('x'),
-                y: $(this).attr('y')
+                x: parseInt($(this).attr('y')),
+                y: parseInt($(this).attr('x'))
             };
 
             console.log(nodoMeta)
@@ -125,7 +125,7 @@ function pintar_tablero(filas, columnas, tablero) {
     for (let f = 0; f < filas; f++) {
         var tr = $('<tr>');
         for (let c = 0; c < columnas; c++) {
-            coord = "(" + f + "," + (c) + ")"
+            coord = f + "," + (c)
             tr.append($('<td>').attr('x', c).attr('y', f).text(coord).addClass(coord));
         }
         tablero.append(tr);
@@ -158,11 +158,32 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
                     encontrada = true
                     // Pinto el camino, que no lo se hasta que he llegado al final, pero lo tengo en cerrada
                     console.log(cerrada)
+
+
+                    var end = false;
+                    var search = nodoActual;
+                    while (!end) {
+                        
+                        if (search.parent === undefined) {
+                            end = true;
+                        } else if(search.parent.status !== 'start') {
+
+                            var celda = $('td[x="' + search.parent.y + '"][y="' + search.parent.x + '"]');
+                            celda.addClass('bg-secondary')
+                            search = search.parent;
+                            
+                            
+                        }
+                    }
+
+                    /*
                     cerrada.forEach(node => {
-                        clase_coord = "(" + node.x + "," + node.y + ")"
+                        clase_coord = "." + node.x + "," + node.y
                         console.log(clase_coord)
-                        //$(String(clase_coord)).addClass('bg-secondary')
-                    });
+                        
+                        var celda = $('td[x="' + node.x + '"][y="' + node.y + '"]');
+                        celda.addClass('bg-secondary')
+                    });*/
 
 
                 } else {
@@ -171,7 +192,7 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
 
                     for (var i = 0; i < ady.length; i++) {
                         var neig = ady[i]
-                        // g -> coste de desplazamiento
+                        // g -> coste de desplazamiento acumulado: ese + tofdo lo que ha hecho antes
                         // h -> distancia a la meta (pitágoras)
                         // f -> g + h
 
@@ -182,7 +203,7 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
                             // f(x) = g(x) + h(x)
                             neig.f = neig.g + neig.h;
                             abierta.push(neig);
-                        } else if (abierta.includes(neig) && !cerrada.includes(neig) && neig.status != "start") {
+                        } /*else if (abierta.includes(neig) && !cerrada.includes(neig) && neig.status != "start") {
                             var newG = calculateG(neig, neig.parent.g);
                             var newH = euclidean(neig, nodoMeta);
                             var newF = newG + newH;
@@ -192,7 +213,7 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
                                 neig.g = newG;
                                 neig.parent = currentNode;
                             }
-                        }
+                        }*/
                     }
 
                     /* Como de abierta tengo que sacar el de menor f, los ordeno para que el primero sea
@@ -278,8 +299,8 @@ function neighbour(matrix, node) {
 
     var ady = [];
 
-    var x = node.x;
-    var y = node.y;
+    var x = parseInt(node.x);
+    var y = parseInt(node.y);
 
     // West
     if (matrix[x - 1] && matrix[x - 1][y]) {
