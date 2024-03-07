@@ -6,6 +6,7 @@ $(document).ready(function () {
     var inicio = $('#inicio');
     var meta = $('#meta');
     var prohibida = $('#prohibida');
+    var limpiar = $('#limpiar');
 
 
     var inicioSelec = false;
@@ -66,6 +67,10 @@ $(document).ready(function () {
         }
     })
 
+    limpiar.on('click', function(){
+        pintar_tablero();
+        alert('A')
+    })
 
     $('table').on('click', 'td', function () {
         // Código para el inicio
@@ -126,7 +131,7 @@ function pintar_tablero(filas, columnas, tablero) {
         var tr = $('<tr>');
         for (let c = 0; c < columnas; c++) {
             coord = f + "," + (c)
-            tr.append($('<td>').attr('x', c).attr('y', f).text(coord).addClass(coord));
+            tr.append($('<td>').attr('x', c).attr('y', f).addClass(coord).removeClass('bg-primary'));
         }
         tablero.append(tr);
     }
@@ -145,7 +150,10 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
         var error = false;
 
         do {
-            if (abierta.length === 0) { error = true }
+            if (abierta.length === 0) { 
+                error = true 
+                alert("No hay camino posible")
+            }
             else {
 
                 // Saco el primero de abierta porque siempre va a ser el menor 
