@@ -67,15 +67,19 @@ $(document).ready(function () {
         }
     })
 
-    limpiar.on('click', function(){
-        pintar_tablero();
-        alert('A')
+    limpiar.on('click', function () {
+        tablero.empty()
+        inicioSelec = false;
+        metaSelec = false;
+        prohibidaSelec = false;
+        nodoIni = null;
+        nodoMeta = null;
     })
 
     $('table').on('click', 'td', function () {
         // Código para el inicio
         if (inicioSelec && !nodoIni) {
-
+            console.log("Poniendo inicio")
             $(this).addClass('bg-primary').addClass('start')
             nodoIni = {
                 x: parseInt($(this).attr('y')),
@@ -83,13 +87,11 @@ $(document).ready(function () {
                 g: 0
             };
 
-            console.log(nodoIni)
 
         }
         else if ($(this).hasClass('bg-primary') && nodoIni) {
             nodoIni = null
             $(this).removeClass('bg-primary').removeClass('start')
-            console.log(nodoIni)
         }
 
         // Código para la meta
@@ -150,8 +152,8 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
         var error = false;
 
         do {
-            if (abierta.length === 0) { 
-                error = true 
+            if (abierta.length === 0) {
+                error = true
                 alert("No hay camino posible")
             }
             else {
@@ -171,16 +173,19 @@ function algoritmoAEstrella(nodoIni, nodoMeta) {
                     var end = false;
                     var search = nodoActual;
                     while (!end) {
-                        
+
                         if (search.parent === undefined) {
                             end = true;
-                        } else if(search.parent.status !== 'start') {
+                        } else if (search.parent.status !== 'start') {
 
                             var celda = $('td[x="' + search.parent.y + '"][y="' + search.parent.x + '"]');
-                            celda.addClass('bg-secondary')
+                            if (!celda.attr('class').includes('start')) {
+                                celda.addClass('bg-secondary')
+                            }
                             search = search.parent;
-                            
-                            
+
+
+
                         }
                     }
 
